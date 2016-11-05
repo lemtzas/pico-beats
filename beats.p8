@@ -88,7 +88,6 @@ end
 
 ------------------------ draw --
 function beat_map()
- -- rectfill(46, measurey-1, 57, measurey+1, 5)
  for i=0,16 do
   map(i,0, measurex,128*i-offset-96, 1,16)
  end
@@ -429,4 +428,3 @@ __music__
 00 41424344
 00 41424344
 00 41424344
-
