@@ -3,50 +3,22 @@ version 8
 __lua__
 
 ------------------------- dat --
-local t = 0;
-local bdat = {}
-bdat[4] = -- o
- { x=-19, y=3, sym="Ž", col=12 }
-bdat[0] = -- left
- { x=-11, y=3, sym="‹", col= 8 }
-bdat[2] = -- up
- { x= -3, y=3, sym="”", col=10 }
-bdat[1] = -- right
- { x=  5, y=3, sym="‘", col= 9 }
-bdat[5] = -- x
- { x= 13, y=3, sym="—", col=11 }
-
-bdat[3] = -- down (unused)
- { x= -3, y=9, sym="ƒ", col=13 }
-
+t = 0
 local odat = {
- bdat[4],
- bdat[0],
- bdat[2],
- bdat[1],
- bdat[5],
- bdat[3]
-}
---
--- print("‹",-11, 3, btnt(0, 8,5))
--- print("”", -3, 3, btnt(2,10,5))
--- print("‘",  5, 3, btnt(1, 9,5))
--- print("Ž",-19, 3, btnt(4,12,5))
--- print("—", 13, 3, btnt(5,13,5))
-who =
- "lemtzas\n"..
- "nolan_exe"
-local songs = {
- first = {
-  name = "wood",
-  rate = 5
- }
-}
+ { b=4, x=-19, y=3, -- o
+   sym="Ž", col=12 },
+ { b=0, x=-11, y=3, -- left
+   sym="‹", col= 8 },
+ { b=2, x= -3, y=3, -- up
+   sym="”", col=10 },
+ { b=1, x=  5, y=3, -- right
+   sym="‘", col= 9 },
+ { b=5, x= 13, y=3, -- x
+   sym="—", col=11 },
+ { b=3, x= -3, y=9, -- down
+   sym="ƒ", col=13 }}
 
 ------------------------ help --
-function btnt(i,a,b)
- return btn(i) and a or b
-end
 
 ------------------------ init --
 function _init()
@@ -62,7 +34,7 @@ end
 function draw_map()
  local measurey = -90
  local measurex = 48
- local speed = 7 -- high = slow
+ local speed = 2 -- high = slow
  local offset = flr(t/speed)
  local interp = t/speed - offset
  -- beat map
@@ -117,15 +89,16 @@ draw_map()
 
 -- keys
 print("t: "..t,-63,-95,2)
-for i=0,5 do
- b = bdat[i]
+for i=1,6 do
+ b = odat[i]
  print(b.sym, b.x, b.y,
-  btnt(i,b.col,5))
+  btn(b.b) and b.col or 5)
 end
 
 -- who
-print(who,-54, 20, 8)
 spr(1,-63,20,1,2)
+print("lemtzas\nnolan_exe",
+ -54, 20, 8)
 
 end
 
