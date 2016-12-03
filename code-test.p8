@@ -2,127 +2,136 @@ pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
 
-rhythm = {
- name = "rhythm",
- author = "lemtzas\nmusic: nolan_exe",
+snek16 = {
+ name = "snek16",
+ author = "lemtzas",
  ----------------------- init --
  _init = function(self)
   -- polluting the globals with my data
-  t = 0
-  score = 0
-  active = {}
-  odat = {
-   { b=4, x=-0x13, -- o
-     sym="Ž", col=12 },
-   { b=0, x=-11, -- left
-     sym="‹", col= 8 },
-   { b=2, x= -3, -- up
-     sym="”", col=10 },
-   { b=1, x=  5, -- right
-     sym="‘", col= 9 },
-   { b=5, x= 13, -- x
-     sym="—", col=11 }}
-   music(1,0,15)
-   self:_update()
+  t,food = 1,0
+  -- snek
+  s_dir, s_x,s_y = nil, 10,10
+  s_len, s_tail = 3, {}
+
+  -- map initialization
+  grid = {}
+  for x=0,63 do
+   grid[x] = {}
+   for y=0,63 do
+    grid[x][y] = 0
+   end
+  end
+ end,
+
+ update_snek = function(self)
+  -- input
+  s_dir =
+   btn"0" and s_dir ~= 1 and 0 or
+   btn"1" and s_dir ~= 0 and 1 or
+   btn"2" and s_dir ~= 3 and 2 or
+   btn"3" and s_dir ~= 2 and 3 or
+   s_dir
+  if btn"4" then self:_init() end
+  if not s_dir then return end
+
+  local p_x,p_y = s_x,s_y
+  s_x =
+   s_dir == 0 and s_x - 1 or
+   s_dir == 1 and s_x + 1 or
+   s_x
+
+  s_y =
+   s_dir == 2 and s_y - 1 or
+   s_dir == 3 and s_y + 1 or
+   s_y
+
+  -- pausing on walls
+  if s_x < 0 or s_x > 63 or
+     s_y < 0 or s_y > 63 then
+   s_x,s_y = p_x,p_y
+   return
+  end
+
+  -- sliding
+  s_tail[#s_tail+1] =
+   {
+    x = p_x,
+    y = p_y
+   }
+  local old = s_tail[1]
+  local new = s_tail[#s_tail]
+  grid[old.x][old.y] = 0
+  grid[new.x][new.y] = 6
+  if #s_tail > s_len then
+   for i=1,#s_tail do
+    s_tail[i] = s_tail[i+1]
+   end
+  end
+
+  -- failure
+  local target = grid[s_x][s_y]
+  if target == 11 then
+   sfx(s_len % 10 == 0 and 1 or 0)
+   s_len = s_len + 1
+   food = food - 1
+  elseif
+     s_dir ~= nil and
+     target ~= 0 then
+   sfx"2"
+   s_done = true
+  end
  end,
 
  --------------------- update --
  _update = function(self)
-  t=min(t+0.5, 2016) -- 2048-32
+  function r_grid()
+   return flr(rnd"63")
+  end
+  t=t+1
 
-  cls(); self:beat_map()
+  if t % 2 == 0 then
+   self:update_snek()
+  end
 
-  -- lookahead
-  active = {}
-  for i=1,5 do
-   active[i] = {}
-   local last = { beat = false }
-   for j=-6,48 do
-    c = pget(48+i, j-90)
-    ison = c > 5
-    last = {
-      beat = ison,
-      new = ison and not last.beat,
-      sustained = ison and last.beat
-     }
-     active[i][j] = last
-     if j == 0 then
-      odat[i].active = active[i][0]
-     end
-   end
-
-   -- try to score
-   b = odat[i]
-   onnow = btn(b.b)
-   if onnow then
-    newtxt = nil
-    if not b.on then
-     for j=0,1 do
-      local hit =
-       active[i][j].new and "early\n"
-       or active[i][-j].new and "late\n"
-      newtxt = hit and j < 1 and "perfect\n" or newtxt or hit
-     end
-    end
-    if newtxt then
-     sfx(1)
-     score = score + 10
-    end
-    if b.active.sustained then
-     score = score + 1
-     newtxt = "+1\n"
-    end
-    lasttxt = newtxt or lasttxt
-   end
-   b.on = onnow
+  if t % 30 == 0 and food < 10 then
+   local x,y = r_grid(), r_grid()
+   grid[x][y] = grid[x][y] == 0 and 11 or 0
+   food = food + 1
   end
  end,
 
 ------------------------ draw --
  _draw = function(self)
-  cls(); camera(-64,-96)
-  map(16,0, -64,-96, 16,16)
+  cls();
 
-  self:beat_map()
-
-  -- lookahead map
-  for i=1,5 do
-   b = odat[i]
-   pal(15, b.col)
-   for j=0,48 do
-    dat = active[i][j]
-    ypos = 4 * (t - flr(t) - j)
-    if dat.sustained then
-     spr(32, b.x,ypos)
-    elseif dat.new then
-     print(b.sym, b.x,ypos, b.col)
-    end
+  -- map
+  for x=0,63 do
+   for y=0,63 do
+    local px,py, color = x*2,y*2, grid[x][y]
+    rectfill(px,py, px+1,py+1, color)
    end
   end
 
-  -- print("t: "..t,-63,-95,2)
-  print((lasttxt or "\n")..score,-9,20,2)
-  lastlasttxt = lasttxt
-
-  for i=1,5 do
-   b = odat[i]
-   circfill(b.x+3, 5, 2,
-    b.active.beat and b.col or 0)
-   print(b.sym, b.x, 3,
-    btn(b.b) and b.col or 5)
-  end
-  --
-  -- -- who
-  print("lemtzas\nnolan_exe",-54, 20, 8)
- end,
-
- ---------------------- extra --
- beat_map = function()
-  for i=0,16 do
-   map(i,0, 48,128*i-flr(t), 1,16)
-  end
+  -- snek head
+  local x, y = s_x*2, s_y*2
+  rectfill(x,y, x+1,y+1, 8)
  end
 }
+
+------------------------ init --
+function _init()
+ snek16:_init()
+end
+
+---------------------- update --
+function _update()
+ snek16:_update()
+end
+
+------------------------ draw --
+function _draw()
+ snek16:_draw()
+end
 
 __gfx__
 00000000000000000c8a9bd07c000007700000077000900770000b07700a00008800080000000000000000000000000000000000000000000000000000000000
@@ -290,9 +299,9 @@ __map__
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-00080000220502e00021050280001a0500c0500c0500f0500f050270000c050050000c050050000c05013000060000c0500f0000e05007000010000d0501a000190000d05007000010000d05022000220001d000
-0001000024650186500f6500b6500365001650046000460006600016000160001600016000160002600026000160007600036001060004600186000560024600056001c600056001260008600066000860008600
-001000000f0500f0500d0500d05000000000000f0500f05000000000000f0500f0500f0500000000000000000f0500f050000000000000000180501a0501c0500000000000000000000000000000000000000000
+00060000110500a0501803001000361001c000381003c1003f1001c000180001a0001c000180001a0001c000180001a0001c000180001a0021c002180001a0021c0020d00007000010000d00022000220001d000
+00070000065500b55011530185301e520245202b51031510300003100031000310003100032000320003200032000320003200032000320003200032000320003200032000320003200032000320003200032000
+000600000a75007750087500775006750057500775007750067500675004750047500575004750037500275002750037500375001750027500375001750017400273002720027200172001710017100170002700
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
