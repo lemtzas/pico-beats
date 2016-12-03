@@ -12,7 +12,6 @@ snek16 = {
   -- snek
   s_dir, s_x,s_y = nil, 10,10
   s_len, s_tail, s_run_id = 3, {}, flr(rnd"32767")
-  dset(0,0)
 
   -- map initialization
   for x=0,63 do
@@ -431,4 +430,3 @@ __music__
 00 41424344
 00 41424344
 00 41424344
-
