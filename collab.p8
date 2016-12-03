@@ -1,6 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
+
 --collab16 cart n, date
 --1 cart 16 devs so little space!
 
@@ -23,7 +24,7 @@ menu = {
     color"7"
     rect(rx-1,ry-1,rx+18,ry+18)
     local cur = games[self.sel+1]
-    --spr(104,32,8,8,2)
+
     color"8"
     cursor(33,24)
     print"pico8-collab16-2"
@@ -57,10 +58,10 @@ cameralib = {
     self.theta = init.theta or 0
     self.width = init.width or 128
     self.height = init.height or 128
-    -- public
+
     self.line = cameralib.line
     self.point = cameralib.point
-    -- private
+
     self._perspective = cameralib._perspective
     self._tan = cameralib._tan
     self._coordstopx = cameralib._coordstopx
@@ -140,7 +141,7 @@ add(games, {
  else
  car.s -= 1
  end
- if (car.s > 20) sfx(0) 
+ if (car.s > 20) sfx(0)
  if (btn(4)) car.s -= 4
  if (btn(4)) sfx(3)
  if (car.s > 200) car.s = 200
@@ -177,7 +178,7 @@ end
  print(car.s.."km/h", 56, 8, 8)
  zspr(36, 1, 1, 108, 80, nextdrive / 75)
  zspr(36, 1, 1, 4, 80, nextdrive / 75)
- end 
+ end
  if over == 2 then
  print("midnight drive", 32, 32)
  print(" Â— to start", 32, 48)
@@ -193,7 +194,7 @@ end
  return p
  end
 }
-) -- game 1
+)
 xturn = true
 add(games,{
 	name = "tictactoe",
@@ -207,11 +208,11 @@ add(games,{
 		cx, cy = 1,1
 		win = 0
 		steps = 0
-		
+
 		function chkxo(x1,y1,x2,y2,x3,y3)
 			return xo[x1][y1] == xo[x2][y2] and xo[x2][y2] == xo[x3][y3] and xo[x1][y1] ~= 0
 		end
-		
+
 		function calcwin()
 		 for x=1,3 do
 		  if chkxo(x,1,x,2,x,3)then
@@ -231,7 +232,7 @@ add(games,{
 		 return steps == 9 and 3 or 0
 		end
 	end,
-	
+
 	_draw = function()
 		if win > 0 then return end
 		pal(9,xturn and 12 or 8)
@@ -244,17 +245,17 @@ add(games,{
 		 end
 		end end
 	end,
-	
+
 	_update = function(self)
 		if btnp() > 0 and win > 0 then self._init() return end
 		sspr(120,96,8,8,(cx-1)*32,(cy-1)*32,32,32)
-		if btnp(0) then --left
+		if btnp(0) then
 			cx -= 1
-		elseif btnp(1) then --right
+		elseif btnp(1) then
 		 cx += 1
-		elseif btnp(2) then --up
+		elseif btnp(2) then
 			cy -= 1
-		elseif btnp(3) then --down
+		elseif btnp(3) then
 		 cy += 1
 		end
 		cx = mid(1,cx,3)
@@ -282,7 +283,7 @@ add(games,{
 			end
 		end
 	end
-}) -- game 2
+})
 add(games,{
 		name="super forum poster 2 turbo dx edition",
 		author="@fweez",
@@ -370,7 +371,7 @@ add(games,{
 			for i=1,20 do
 				rndactor(i*2)
 			end
-			local wide = "Œ”…‰‘‚†ŠŽ’–ƒ‡‹“—"
+			local wide = "Œ”…‰‘‚†ŠŽ’–ƒ‡‹“—"
 			for i=0,4 do
 				local t = rndactor(nil, 127)
 				t.vy = -1
@@ -470,7 +471,7 @@ _draw=function(self)
 	s="game over"
 	if (t>=0) s="time "..t
 	print(s,84,121)
-end 
+end
 })
 
 add(games,{
@@ -493,16 +494,16 @@ add(games,{
 				if(px<o[1]+8 and px+ps>o[1] and py<o[2]+8 and py+ps>o[2]) fobj,pwrup=o,o[3] return true		end
 			return false
 		end
-		
+
 	end,
 	_update = function()
 		tick+=1
-		
+
 		pf,colsol=0,{}
 		for s in all(solids) do
 			if (abs(s[1]-px)<50 and	abs(s[2]-py)<50) add(colsol,s)
 		end
-		
+
 		if(btn(1)) px+=pspd xdirc,pf=1,tick%4
 		if(btn(0)) px-=pspd xdirc,pf=0xffff,tick%4
 
@@ -513,34 +514,34 @@ add(games,{
 		if((btnp(2) or btnp(4)) and pjcnt<pjmax) pdy=0xfff8	pjcnt+=1	sfx(16)
 		pdy=min(pdy+1,14)
 		py+=pdy
-		local ydirc=sgn(pdy)	
+		local ydirc=sgn(pdy)
 		if (pjcnt==0) pjcnt=1
 		while col(colsol) do
 			py-=ydirc
 			pdy=0
-			if (ydirc==1)	pjcnt=0 
+			if (ydirc==1)	pjcnt=0
 		end
-		
-		
+
+
 		if col(pwrups)	then
-			if pwrup=="air jump" then 
-				pjmax+=1 
+			if pwrup=="air jump" then
+				pjmax+=1
 			elseif pwrup=="shrink" then
-				ps-=7 
-			else 
+				ps-=7
+			else
 				pspd+=1
 			end
-			del(pwrups,fobj)	
+			del(pwrups,fobj)
 			sfx(17)
 		end
 
 	camera(mid(px-64,0,384),mid(py-64,0,384))
 	if (px<0) text,py,px="   thanks for playing",0xfff8,64 sfx(18)
-	end, 
-	_draw = function() 
+	end,
+	_draw = function()
 		cls()
 		sspr(64+pf*8,40,7,7,px,py,ps,ps,xdirc==0xffff)
-		
+
 		for s in all(solids) do
 			spr(120+s[3],s[1],s[2])
 		end
@@ -552,7 +553,7 @@ add(games,{
 		print(text,10,17)
 
 	end
-}) -- game 5
+})
 add(games, {
  name = "pikoban",
  author = "iko",
@@ -565,14 +566,14 @@ add(games, {
   getspritecoords, drawthing, loadlevel =
 
   function(i)--getspritecoords
-   
-   if i==101 or i==102 then --player
+
+   if i==101 or i==102 then
     return 46,49,5,17
-   elseif i>102 then --player 
+   elseif i>102 then
     return 51,49,5,17
-   elseif i==5 then         --floor
+   elseif i==5 then
     return 32,49,14,9
-   elseif i<4 then --cube
+   elseif i<4 then
     return 32,32,17,17
    end
     return 49,32,15,17
@@ -580,7 +581,7 @@ add(games, {
   end,
 
   function(x,y,n)--drawthing
-   
+
    local finalx, finaly = 56 + 8*x - 8*y, 24 + 4*x + 4*y
    local sx, sy, sw, sh = getspritecoords(n)
 
@@ -589,27 +590,27 @@ add(games, {
    if n<4 then finalx -=1 finaly -=1 end
 
    if n > 100 then
-    finalx += 5 
+    finalx += 5
     if playerh then finaly -= 10 end
-   end --correct player coords
+   end
 
    if n == 2 then
     pal(7,15)
     pal(6,9)
     pal(13,4)
-   end 
+   end
 
    sspr(sx,sy,sw,sh,finalx,finaly,sw,sh,
     n == 102 or n == 103)--flipx
 
    pal()
 
-   if n==3 then 
+   if n==3 then
     sspr(56,49,8,17,finalx+8,finaly-12)
-   end 
+   end
   end,
 
-  function(lvl) --loadlevel
+  function(lvl)
 
    playerx, playery, playerh, curlevel = 8, 8, false, lvl
 
@@ -630,37 +631,37 @@ add(games, {
   local deltax, deltay  = 0, 0
 
   if     btnp "0" then deltax -= 1 playerfacing = 103
-  elseif btnp "1" then deltax += 1 playerfacing = 101 
+  elseif btnp "1" then deltax += 1 playerfacing = 101
   elseif btnp "2" then deltay -= 1 playerfacing = 104
-  elseif btnp "3" then deltay += 1 playerfacing = 102 
-  elseif btnp "5" then loadlevel(curlevel) end --restart button
+  elseif btnp "3" then deltay += 1 playerfacing = 102
+  elseif btnp "5" then loadlevel(curlevel) end
 
-  local intendedx, intendedy, moveplayerintended = 
+  local intendedx, intendedy, moveplayerintended =
    mid(1,playerx+deltax,8),
-   mid(1,playery+deltay,8),  
+   mid(1,playery+deltay,8),
    false
 
   local intendedcubeindex = cubes[intendedx][intendedy]
 
-  if intendedcubeindex==4 and deltay!=0 then --ramp y (both levels)
+  if intendedcubeindex==4 and deltay!=0 then
 
    playery, playerh = intendedy+deltay, not playerh
 
-  elseif playerh then --level above 
+  elseif playerh then
 
-   moveplayerintended = intendedcubeindex<3 
+   moveplayerintended = intendedcubeindex<3
 
    if intendedcubeindex==3 then
     loadlevel(curlevel+1)
    end
 
-  else --level ground
-  
-   if intendedcubeindex==5 then --walk into nothing
+  else
+
+   if intendedcubeindex==5 then
 
     moveplayerintended = true
 
-   elseif intendedcubeindex==2 then --walk into movecube
+   elseif intendedcubeindex==2 then
 
     local intplusx, intplusy = intendedx+deltax, intendedy+deltay
 
@@ -677,7 +678,7 @@ add(games, {
   end
 
   if moveplayerintended then
-   playerx, playery = intendedx, intendedy 
+   playerx, playery = intendedx, intendedy
   end
 
   cls()
@@ -691,8 +692,8 @@ add(games, {
     drawthing(playerx,playery,playerfacing)
     end
 
-  end end --end x,y
-   
+  end end
+
  end,
 }
 )
@@ -700,7 +701,7 @@ draw_rotated_sprite = function(spr, spr_x, spr_y, spr_ang)
   r=flr(spr_ang*20)/20
   s,c=sin(r),cos(r)
   b=s*s+c*c
-  for y=-6,5 do 
+  for y=-6,5 do
     for x=-6,5 do
       ox,oy=( s*y+c*x)/b, (-s*x+c*y)/b
 
@@ -708,7 +709,7 @@ draw_rotated_sprite = function(spr, spr_x, spr_y, spr_ang)
       colr=ox+4,oy+4,
         sget(spr%16*8+ox+4,flr(spr/16)*8+oy+4)
 
-      if ax>=0 and ax<8 and ay>=0 and ay<8 and colr>0 then 
+      if ax>=0 and ax<8 and ay>=0 and ay<8 and colr>0 then
         pset(spr_x+4+x,spr_y+4+y,colr)
         color(7)
       end
@@ -719,12 +720,12 @@ end
 add(games, {
  name = "bmx air king",
  author = "dollarone",
-  
+
 _init = function(self)
   music"28"
   self:startgame()
 end,
-startgame = function() 
+startgame = function()
   timer,
   player_x,
   player_y,
@@ -753,7 +754,7 @@ end,
 
 _update = function(self)
   timer+=player_speed
-  if btn"4" then 
+  if btn"4" then
     self:startgame()
   end
 
@@ -765,19 +766,19 @@ _update = function(self)
   end
 
   if death_x==1 then
-    if btn"0" then 
+    if btn"0" then
       player_angle+=0.03125
-    elseif btn"1" then 
+    elseif btn"1" then
       player_angle-=0.03125
-    elseif btn"5" then 
+    elseif btn"5" then
       player_sprite = 27
-    elseif btn"2" then 
+    elseif btn"2" then
       player_sprite = 24
-    elseif btn"3" then 
-      player_sprite = 25 
+    elseif btn"3" then
+      player_sprite = 25
     end
     score += flr(player_sprite/15)
-  elseif btn"0" and death_y<0 or btn"1" and death_y==0 then 
+  elseif btn"0" and death_y<0 or btn"1" and death_y==0 then
     death_y = abs(death_y)-1
     player_speed += 0.01
   end
@@ -801,7 +802,7 @@ _update = function(self)
     player_y-=player_speed
     player_y+=force
     player_x+=player_speed
-  end 
+  end
 
   if player_y>71 then
     player_y,
@@ -816,8 +817,8 @@ _update = function(self)
       if score>dget"29" then
         dset(29, score)
         force = "\n     new highscore!"
-        sfx"17" -- using someone else's sfx, woo 
-      end     
+        sfx"17"
+      end
       score = " nice jump! score: " .. score .. force
     else
       death_x,
@@ -825,9 +826,9 @@ _update = function(self)
       player_sprite,
       player_angle,
       score = player_x,player_y,10,0,"    ouch ouch ouch..."
-      sfx"2" -- using someone else's sfx, woo
+      sfx"2"
     end
-  end  
+  end
 end
 })
 add(games,{
@@ -854,7 +855,7 @@ add(games,{
 			local id = {negsizex,i,possizer}
 			c:line(ic,id)
 			c:line(id,ia)
-			-- x
+
 			c:line(ia,ic)
 			c:line(ib,id)
 		end
@@ -1011,7 +1012,7 @@ add(games,{
 
   print("score " .. score .. "       hi " .. hiscore .. "     level " .. level,0,122)
  end
-}) -- game 9
+})
 mazes = {
  name = "infinite mazes",
  author = "fayne aldan",
@@ -1090,15 +1091,15 @@ add(games,
  _init = function()
   players=
   {
-   {7, -- x
-    64, -- y
-    0, -- angle
-    0   -- timer for shooting
+   {7,
+    64,
+    0,
+    0
    },
-   {120, -- x
-    64, -- y
-    0.5, -- angle
-    0   -- timer for shooting
+   {120,
+    64,
+    0.5,
+    0
    }
   }
   win,t=nil,nil
@@ -1117,7 +1118,7 @@ add(games,
       self[1]=rx
       self[2]=ry
      end
-    end 
+    end
     if btnp(4,p) and timer==0 then
      sfx"3"
      timer=100
@@ -1125,14 +1126,14 @@ add(games,
     end
     self[3]=a
     self[4]=timer
-   
+
     local x,y=self[1],self[2]
     local ca,sa=cos(a),sin(a)
     for i=-4,3 do
      local ci,si=i*ca,i*sa
      for j=-4,3 do
       local col=sget(100+i,68+j)
-      if (col!=0) pset(x+(j*sa+ci),y+(j*ca-si),col) 
+      if (col!=0) pset(x+(j*sa+ci),y+(j*ca-si),col)
      end
     end
    end
@@ -1152,12 +1153,12 @@ add(games,
      =ca*2+x,-sa*2+y,1,1
      if pget(rx,y)==5 then
       sfx"1"
-      boundx=-1 
+      boundx=-1
       rx=x
      end
      if pget(x,ry)==5 then
       sfx"1"
-      boundy=-1 
+      boundy=-1
       ry=y
      end
      if pget(rx,ry)==(col==1 and 7 or 0) then
@@ -1168,7 +1169,7 @@ add(games,
      bullet[i]={rx,ry,ra,col,t-1}
     end
    end
-  
+
    cls()
    rectfill(0,0,127,127,5)
    rectfill(2,2,125,125,13)
@@ -1181,7 +1182,7 @@ add(games,
    for b in all(bullet) do
     pset(b[1],b[2],b[4])
    end
-   if (win) then 
+   if (win) then
     print(win)
     t=10
    end
@@ -1191,8 +1192,8 @@ add(games,
     run()
    end
   end
- end 
-}) -- game 11
+ end
+})
 btnp_45=function()
  return btnp"4" or btnp"5"
 end
@@ -1200,14 +1201,14 @@ end
 add(games,{
  name="  tele",
  author="@rhythm_lynx\nmusic:  @robbyduguay",
- 
+
  _init=function(self)
   poke(0x5f2c,3)
   music(4,1000)
   state,level,lx,ly,moves,restarts="title",1,16,16,0,0
   self.find_player()
  end,
- 
+
  find_player=function()
   for x=0,7 do
    for y=0,7 do
@@ -1215,7 +1216,7 @@ add(games,{
    end
   end
  end,
- 
+
  find_telepad=function(dx,dy)
   x,y=px-lx,py-ly
   while x>0 and x<7 and y>0 and y<7 do
@@ -1224,7 +1225,7 @@ add(games,{
   end
   return 0,0,false
  end,
- 
+
  _update=function(self)
   if state=="title" then
    if(btnp_45())state="game"
@@ -1232,9 +1233,9 @@ add(games,{
   elseif state=="complete" then
    if(btnp_45())cgame=menu poke(0x5f2c,0)music(-1,1000)
   end
-  
+
   if(btnp_45())reload(0x1000,0x1000,0x2000)self.find_player()restarts+=1
-  
+
   count=0
   for x=0,7 do
    for y=0,7 do
@@ -1244,7 +1245,7 @@ add(games,{
    end
   end
   if(count==0)mset(gx,gy,144)
-  
+
   found=false
   if(btnp"0")newx,newy,found=self.find_telepad(0xffff,0)
   if(btnp"1")newx,newy,found=self.find_telepad(1,0)
@@ -1263,7 +1264,7 @@ add(games,{
    mset(px,py,m)
   end
  end,
- 
+
  _draw=function(self)
   cls"1"
   map(16,16,0,0,8,8,4)
@@ -1289,7 +1290,7 @@ add(games,
  author="jamish",
  _init = function()
   music"20"
-  
+
   if highscore == nil then highscore = 0 end
   frame,
   score,
@@ -1299,31 +1300,31 @@ add(games,
   playerx,
   gameover,
   flips,
-  obstacles, --heightmap of obstacles
-  gaps, --heightmap of gaps in the obstacle
-  timeline = -- very scientific way of getting the perfect slam animation ;) it is reverse order
-   0, 
-   0, 
-   0, 
-   0, 
-   120, --next
-   5, --playerx
-   false, --gameov er
-   false, --flips
-   {}, --obstacles
-   {}, --gaps
-   {0,2,8,20,31,32,32,32,32,32,32,10,5,2} --timeline
+  obstacles,
+  gaps,
+  timeline =
+   0,
+   0,
+   0,
+   0,
+   120,
+   5,
+   false,
+   false,
+   {},
+   {},
+   {0,2,8,20,31,32,32,32,32,32,32,10,5,2}
 
   function randomize(level)
    level = min(level,4)
    height = 0
    for i=1,8 do
-    height += flr(rnd"5"-2) -- move the height by -2 to 2 units per iteration
+    height += flr(rnd"5"-2)
     obstacles[i], gaps[i] = height, 0
    end
    color_floor, color_ceiling, color_bg = rnd"8"+8, rnd"8"+8, rnd"6"
 
-   -- throw in 1 to 4 gaps at random locations with a height of 1 or 2
+
    for i=4,level,-1 do
     gaps[flr(rnd"8")+1] = flr(rnd"2")+1
    end
@@ -1342,12 +1343,12 @@ add(games,
    return
   end
 
-  if next < t then 
+  if next < t then
    randomize(flr(score/10)+1)
    score += 1
    next, highscore = t + max(80-score,35), max(score, highscore)
   end
-  
+
   remaining = next-t
   if remaining < 14 then
    offset = timeline[remaining+1]
@@ -1359,52 +1360,52 @@ add(games,
   end
 
   if 4 < remaining and remaining < 11 then
-   frame = 32 -- strike a pose
+   frame = 32
    if gaps[playerx] < 2 then
-    frame = 33 --lookin good m8
+    frame = 33
    end
    if gaps[playerx] < 1 then
-    --get dead, kid
-    music"-1" 
+
+    music"-1"
     gameover = true
    end
-  else 
-   --movement
+  else
+
    if btnp"0" then
     playerx -= 1
    elseif btnp"1" then
     playerx += 1
    end
-   --animate player
+
    if t%3 < 1 then
-   --randomize the 4 frames in the col, then add the row offset
+
     frame, flips = rnd"4"+16*flr(rnd"2"), rnd"2" < 1
    end
   end
-  --wrap player around the screen
+
   playerx = (playerx-1)%8+1
   t+=1
  end,
  _draw = function()
-  --background
+
   rectfill(0,0,128,128,color_bg)
 
-  --bars
+
   for j=0,128 do for i=0,7 do
    line_x = i*16
    obstacle_y = obstacles[i+1]*4
    line_y_ceiling, line_y_floor = 48-obstacle_y-gaps[i+1]*8+offset-j, 80-obstacle_y+j
    temp_color_ceiling, temp_color_floor = color_ceiling, color_floor
-   if j<4 and j~=2 then 
+   if j<4 and j~=2 then
     temp_color_ceiling -= 1
-    temp_color_floor -= 1 
+    temp_color_floor -= 1
     color_text = temp_color_ceiling
    end
    line(line_x, line_y_floor, line_x+15, line_y_floor, temp_color_floor)
    line(line_x, line_y_ceiling, line_x+15, line_y_ceiling, temp_color_ceiling)
-  end end 
+  end end
 
-  --player and text
+
   color(color_text)
   playery = 72-obstacles[playerx]*4
   if gameover then
@@ -1412,73 +1413,201 @@ add(games,
    playery += 5
    text("press \x8e/z to restart", 23, 110)
   end
-  -- draw player
+
   spr(136+frame, playerx*16-12, playery, 1, 1, flips)
   text("score: "..score.."\n high: "..highscore, 2, 2)
  end
-}) -- game 13add(games,{name="tbd",author="tbd",_update = function() win() end}) -- game 14
+})
+
+
+-----------------------------------------------------------------
+
+
+
+add(games,{
+ name = "snek over 16",
+ author = "lemtzas\nhiscore: " .. dget"42",
+ ----------------------- init --
+ _init = function(self)
+  -- polluting the globals with my data
+  t,food = 1,0
+  -- snek
+  s_dir, s_x,s_y = nil, 10,10
+  s_len, s_tail, s_run_id = 3, {}, flr(rnd"32767")
+
+  -- map initialization
+  for x=0,63 do
+   for y=0,63 do
+    sset(x,y,0)
+   end
+  end
+ end,
+
+ update_snek = function(self)
+  if s_done then
+    local tail_end = s_tail[1]
+    del(s_tail,tail_end)
+    return tail_end and sset(tail_end.x,tail_end.y,8)
+  end
+
+  -- input
+  s_dir =
+   btn"0" and s_dir ~= 1 and 0 or
+   btn"1" and s_dir ~= 0 and 1 or
+   btn"2" and s_dir ~= 3 and 2 or
+   btn"3" and s_dir ~= 2 and 3 or
+   s_dir
+  if btn"4" then self:_init() end
+  if not s_dir then return end
+
+  local p_x,p_y = s_x,s_y
+  s_x =
+   s_dir == 0 and s_x - 1 or
+   s_dir == 1 and s_x + 1 or
+   s_x
+
+  s_y =
+   s_dir == 2 and s_y - 1 or
+   s_dir == 3 and s_y + 1 or
+   s_y
+
+  -- pausing on walls
+  if s_x < 0 or s_x > 63 or
+     s_y < 0 or s_y > 63 then
+   s_x,s_y = p_x,p_y
+   return
+  end
+
+  -- sliding
+  s_tail[#s_tail+1] =
+   {
+    x = p_x,
+    y = p_y
+   }
+  local old = s_tail[1]
+  local new = s_tail[#s_tail]
+  sset(old.x,old.y,0)
+  sset(new.x,new.y,6)
+  if #s_tail > s_len then
+   for i=1,#s_tail do
+    s_tail[i] = s_tail[i+1]
+   end
+  end
+
+  local target = sget(s_x,s_y)
+  if target == 11 then
+    s_len = s_len + 1
+    food = food - 1
+    if s_len > dget"42" then
+      s_winning = dget"43" ~= s_run_id and sfx"47" or true
+      dset(42,s_len)
+      dset(43,s_run_id)
+    end
+    sfx(s_len % 10 == 0 and 45 or 44)
+  elseif
+    s_dir ~= nil and
+    target ~= 0 then
+    sfx"46"
+    s_done = true
+  end
+
+  sset(s_x,s_y,8)
+ end,
+
+ --------------------- update --
+ _update = function(self)
+  function r_grid()
+   return flr(rnd"63")
+  end
+  t=t+1
+
+  if t % 2 == 0 then
+   self:update_snek()
+  end
+
+  if t % 30 == 0 and food < 10 then
+   local x,y = r_grid(), r_grid()
+   sset(x,y,sget(x,y) == 0 and 11 or 0)
+   food = food + 1
+  end
+ end,
+
+------------------------ draw --
+ _draw = function(self)
+  cls()
+  print("hiscore " .. dget"42", 1, 1, s_winning and 12 or 1)
+  print("  score " .. s_len, 1, 7, 1)
+  sspr(0,0,64,64,0,0,128,128)
+ end
+})
+games[#games]:_init()
+cgame = games[#games]
+
+-----------------------------------------------------------------
+
+
 add(games,{name="videopirate",author="team_disposable",
 
 _update = function()
-	
+
 	cls()
 
 	if notgameover then
 
 		if cliptimer <= 0 then
-					
+
 			if (#obs > 0 or success == 15) notgameover = false
-				
-			
+
+
 			size1,size2,rand = rnd"6.9"*8,rnd"6.9"*8,rnd"3.9"
-			
+
 			obs = {}
-			
+
 			for i=1,success,1 do
 
 				add(obs,{i,flr(rnd"4"),11})
 
 			end
-				
+
 			cliptimer += 100
-			
+
 				sprite1x,sprite1y,sprite2x,sprite2y = 32,64,40,64
-				
-				if(rand < 3) sprite1y = 80 
-				
+
+				if(rand < 3) sprite1y = 80
+
 				if(rand < 2) sprite1y,sprite2y = 72,80
-				
+
 				if(rand < 1) sprite1y,sprite2y = 64,72
 
-		end -- end of cliptimer is 0
+		end
 
-		--draw the clip
+
 
 		adjust,adjust2 = rnd"8",rnd"8"
-	
+
 		sspr(sprite1x,sprite1y,8,8,32+adjust,40+adjust2,size1,size1)
-		
+
 		sspr(sprite2x,sprite2y,8,8,60+adjust2,40+adjust,size2,size2)
-		
-		--update obstructions
-	
-		if #obs == 0 then 
-			success += 1  cliptimer = 0 
-	
+
+
+
+		if #obs == 0 then
+			success += 1  cliptimer = 0
+
 		else
-	
+
 		o = obs[1]
 		o1,o2,o3 = o[1],o[2],o[3]
-		if o1 == 1 then 
-				
-				
-			if (btnp"5" and btnp"4") o3 = 0  
-					
+		if o1 == 1 then
+
+
+			if (btnp"5" and btnp"4") o3 = 0
+
 			sspr(32,88,8,8,40,50,40,40)
-					
-			
+
+
 		elseif o1 == 2 then
-					
+
 			if(btnp"4") o3 -= 2
 			liney = rnd"40"+29
 			for i = 19,109,5 do
@@ -1486,95 +1615,95 @@ _update = function()
 				line(i,liney,i+o3,liney+o3,14)
 
 			end
-						
-				
+
+
 		elseif o1  < 11 then
-						
+
 			if btn(o2) then o3 -= 2 end
-						
-						
+
+
 			spritex,flipped = 48,false
-					
-					
-			if o2 == 1 then flipped = true   
-						
-			elseif o2 == 2 then spritex = 56  
-						
+
+
+			if o2 == 1 then flipped = true
+
+			elseif o2 == 2 then spritex = 56
+
 			elseif o2 == 3 then spritex = 56 flipped = true end
-						
+
 			sspr(spritex,72,8,8,50,50,24,24,flipped,flipped)
-						 
+
 			for i=1,o3,1 do
 				for j=1,20,1 do
-								
+
 					pset(rnd"90"+19,rnd"80"+19,o2+1)
-								
-								
+
+
 				end
-										
+
 			end
-					
+
 		else
-				
+
 			bumpat -= 4
 			if bumpat < 19 then bumpat = 109 end
-						
+
 			bmpcolour = 9
-						
+
 			if bumpat < 74 and bumpat > 54 then
 				bmpcolour = 11
 				if btnp"5" then o3,bumpat= 0,15   end
-						
+
 			end
-						
+
 			for b = 40+adjust,80,5 do
 				line(19,b,bumpat,b,bmpcolour)
 				line(bumpat+8,b,109,b)
 				spr(181,bumpat,b-8)
 			end
-					
-					
+
+
 		end
-			
+
 		o[3] = o3
 		if(o3 <= 0.1) del(obs,o) cliptimer += 35
-		
+
 		cliptimer -=1
-		--cursor(20,28)
+
 		print(cliptimer,85,20)
-		
-	end	
-	
-	
-		
+
+	end
+
+
+
 else
 		cursor(20,28)
-		
-		if success == 15 then 
-			print"your collection\nis superb. \nvhs will never die,\nyou gloat\n\n\n\n\npress z to restart" 
-		
+
+		if success == 15 then
+			print"your collection\nis superb. \nvhs will never die,\nyou gloat\n\n\n\n\npress z to restart"
+
 		else
 			print"no one said piracy\nwas easy.\n\nz+x to break copyright\narrows reduce static\nz to remove scanlines\nx in time to lock on\n\npress z to restart"
-		
+
 		end
-		--print(printline,20,28)
-		
+
+
 		if(btnp"4") cgame:_init()
 end
-	--draw tv
+
 	sspr(48,80,16,16,4,4,120,120)
-	--draw tape
+
 	spr(134,30,110,2,1)
 	print(success,50,110)
-	
-	
+
+
 end,
-		
+
 _init = function(self)
-			
+
 		notgameover,cliptimer,success,bumpat,obs = true,0,0,0,{}
 		music"0"
-		
+
 	end})
 add(games,{
 name="\nb\76\79\66\66\89 b\79\66\66\89 a\78\68\nt\72\69 b\73\71 b\82\69\65\75\79\85\84",
@@ -1589,7 +1718,7 @@ _init = function()
  0,0,0,
  cameralib.new()
  camera.z=0xffffff
- 
+
  blobs={}
  for i=1,8 do
   add(blobs,{})
@@ -1597,64 +1726,64 @@ _init = function()
  music"60"
 end,
 _draw = function()
- --cls
+
  for i=1,666 do
   print("-\152-",rnd"131"-8,rnd"131",2)
  end
- 
+
  if btn"0" then p_vx+=0.0625 end
  if btn"1" then p_vx-=0.0625 end
  if btn"2" then p_vy+=0.03125 end
  if btn"3" then p_vy-=0.03125 end
  if btn"4" then p_vz-=0.001 end
- 
- 
- --bg
+
+
+
  color"8"
- 
+
  camera:line({0xfffffd,0xffffff.4,1},{0xfffffd,0xffffff.4,99})
  camera:line({3,0xffffff.4,1},{3,0xffffff.4,99})
  camera:line({3,2,1},{3,2,99})
  camera:line({0xfffffd,2,1},{0xfffffd,2,99})
- 
+
  for i=1,2,0.0625 do
   local d=(i+p_z)%1*99
- 
+
   camera:line({0xfffffd,0xffffff.4,d},{0xfffffd,2,d})
   camera:line({3,0xffffff.4,d},{3,2,d})
   camera:line({0xfffffd,0xffffff.4,d},{3,0xffffff.4,d})
   camera:line({0xfffffd,2,d},{3,2,d})
  end
- 
- --blobs
+
+
  for i,b in pairs(blobs) do
-  
+
   local z,seed2=b.z or 0,
   i/max(1,30+p_z)+p_z
   local p1={sin(seed2/2.123),cos(seed2/2.321),(i+p_z)%1*99}
   p2,b.z=camera:_coordstopx(camera:_perspective(p1)),p1[3]
-  
-  --collision
+
+
   if b.z-z > 0 then
    if abs(p1[1]-p_x)+abs(p1[2]-p_y) < 1 then
     rectfill(0,0,127,127)
     sfx"61"
     l-=1
    else
-    sfx"60"  
+    sfx"60"
    end
   end
- 
+
   local x,y,z=p2[1],p2[2],min(100,10/sqrt(b.z))
   circfill(x,y,z,2)
   circ(x,y,z-1,8)
  end
- 
- 
- --player
- 
+
+
+
+
  a_tx,p_p2=p_x*6,camera:_coordstopx(camera:_perspective({p_x,p_y,1}))
- 
+
  camera.theta=a_tx/0xffff6a
  local px,py,r=p_p2[1],p_p2[2],24-abs(a_tx)
  circfill(px,py,r,2)
@@ -1662,26 +1791,26 @@ _draw = function()
  circfill(px+a_tx,py+5*p_y,r/2.5)
 
  print("\nd:"..max(p_z*0xfffff6).."\nt:"..t.."\nl:"..l,1,1)
- 
+
  if l>0 then
-  --gameon
+
   t+=1
   p_z+=p_vz
   p_x+=p_vx
   p_y+=p_vy
-  
+
   p_vz*=0.97
   p_vx*=0.9
   p_vy*=0.9
-  
+
   p_x*=0.7
-  p_y*=0.8 
+  p_y*=0.8
  else
-  --gameover
+
   print"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n           you lost!\n\n     press \151 to continue"
   if btnp"5" then run() end
  end
-end}) -- game 16
+end})
 __gfx__
 1111111105000050ff008000111111110000000000000000000000000000000000000ff00000ff00000000000000000088800000770000000000000000000000
 1222222155555555dd0888001ccdd99102222222222222200dddddddddddddd0000ccff000ccff00000000000000000088800000777000000000000000000000
@@ -1707,14 +1836,14 @@ __gfx__
 08ccc08044464644dddd777de1e11e1e155555561111111111111111111711112280000022222280222800004000000000000000000000000000000000000000
 8880088846664664dddd7d7de111111e15115116111111111111111111111111222800002222222822228800422cccff00000000000000000000000000000000
 0800008044444444ddddddddeeeeeeee15555556111111111111111111111111222800002222222822222288022fccff00000000000000000000000000000000
-dddffddfdddddddd0555555088888888555555553333333311111111333333332222222222222228000000000000000000000000000000000000000000000000
-ddd66dcddddddddd0566665088222288555775553313133311777711331313332222222222222228000000000000000000000000000000000000000000000000
-ddccccddddcddcdd0656656082888828555775553331333317776771333133332222222222222228000000000000000800000000000000000000000000000000
-ececceeedddccddd0666666082822828555775553333333317777571333333332222222222222228000000000000008800000000000000000000000000000000
-99f11999dddccddd5000000d82822828555775553333313117777771333331312222222222222228000000000000082800000000000000000000000000000000
-aaa1a1aaddcddcdd0555ddd082888828555775553333331617777771633333132222222222222228000000000008822800000000000000000000000000000000
-aa11aa1adddddddd0ddd555088222288555775553333336611777711663333332222222222222228000000008882222800000000000000000000000000000000
-aa8aaaa8ddddddddd000000588888888555555553333366511111111566333332222222222222228888888882222222800000000000000000000000000000000
+dddffddf000000000555555088888888555555553333333311111111333333332222222222222228000000000000000000000000000000000000000000000000
+ddd66dcd007777700566665088222288555775553313133311777711331313332222222222222228000000000000000000000000000000000000000000000000
+ddccccdd0b700b700656656082888828555775553331333317776771333133332222222222222228000000000000000800000000000000000000000000000000
+ececceee0070b0700666666082822828555775553333333317777571333333332222222222222228000000000000008800000000000000000000000000000000
+99f11999007000705000000d82822828555775553333313117777771333331312222222222222228000000000000082800000000000000000000000000000000
+aaa1a1aa000087700555ddd082888828555775553333331617777771633333132222222222222228000000000008822800000000000000000000000000000000
+aa11aa1a000000000ddd555088222288555775553333336611777711663333332222222222222228000000008882222800000000000000000000000000000000
+aa8aaaa800000000d000000588888888555555553333366511111111566333332222222222222228888888882222222800000000000000000000000000000000
 00044400000000005555555555555555000000066600000000000000660000000000000000000000000000000000000000000000888488846767676767676767
 004ffff0000000005565555555555655000006677766000000000001dd6600000000000000000000000000000000000000011000444444447676767676333376
 004f3f3000088000560666666666606500066777777766000000001666dd66000000000000000000000000000000000000155100848884886767676767333367
@@ -1779,38 +1908,38 @@ c000000c0000000000000000000000000006006004000040540000000000004500800008cccc1118
 00000000000000000000000000000000060550600090090005555555555555500000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000006666000900009005000000000000500000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000009000000905000000000000500000000000000000000000000000000000000000000000000000000000000000
-00000000000000000000000000000000cccccccccccccccc06750000000067500000000000000000000000000000000005555555555555555555555000000000
-00000000000000000000000000000000c777777777cccccc06750000000067500000000000000000000000000000000055000055550000555500005500666600
-00000000000000111100000000000000c7ccccccccccccc106750000000067500000000000000000000000000000000050000005500000055000000506000060
-00000000000001cccc10000000000000ccccccccccccc11108880000000088800000000000000000000000000000000050000005500000055000000506000060
-00000000000111111111100000000000067500000000675087888000000878880000000000000000000000000000000050000005500000055000000506000060
-0000000000dddddddddddd0000000000067500000000675088888000000888880000000000000000000000000000000050000005500000055000000506000060
-0000dddddddddd5555dddddddddd0000067500000000675088882000000888820000000000000000000000000000000055000055550000555500005500666600
-000d1111dddd55511555dddd1111d000067500000000675008820000000088200000000000000000000000000000000055555555555555555555555500000000
-00d1aaaa1ddd551dd155ddd1aaaa1d00000000000000000000000000000000000000000000000000000000000000000055555555555555555555555500000000
-0d1a9998a1d551dddd155d1a8999a1d0000000000000000000000000000000000000000000000000000000000000000055000055550000555500005500999900
-dd18884481d551dddd155d18448881dd000ccc000000000c000000ccc000000c0000000000000000000000000000000050000005500000055000000509000090
-dd1a9998a1d551dddd155d1a8999a1ddc0cc0c00ccc00ccc0ccc0cc0cc0000cc0000000000000000000000000000000050000005500000055000000509000090
-00d1aaaa1dd5551111555dd1aaaa1d000cc00ccc00cccc00cc0ccc000ccccc000000000000000000000000000000000050000005500000055000000509000090
-000d1111d00dd555555dd00d1111d00000000000000cc000c0000000000cc0000000000000000000000000000000000050000005500000055000000509000090
-0000000000000dddddd0000000000000000000000000000000000000000000000000000000000000000000000000000055000055550000555500005500999900
-00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000055555555555555555555555500000000
-000000006666666666666666000000000c00c00000cc00c00cc000c000cc0cc0000000000000000000000000000000005555555555555555555555559aaaaaa9
-000000663333363553633333660000000c00ccc000c00cc00c000cc00cc000c000000000000000000000000000000000550000555500005555000055a900009a
-000066555755335b55335555556600000c000cc000c00c000cc00c000c0000c000000000000000000000000000000000500000055000000550000005a090090a
-00663355b75535555b53b5bb5b3366000cc00c0000cccc0000cc0cc00cc00cc000000000000000000000000000000000500000055000000550000005a009900a
-663333775ab535b5555355555533336600cc0c0000cccc00000c0c0000c00c0000000000000000000000000000000000500000055000000550000005a009900a
-3333335ba5773355b533bb5bb5333336000c0cc00cc00c000cc00c0000c00c0000000000000000000000000000000000500000055000000550000005a090090a
-36d333557b553635536355555533386300cc00c000c00c000c000cc000ccccc000000000000000000000000000000000550000555500005555000055a900009a
-36d23355755533333333bbb5bb33886300c000c000c000c00c0000cc0000c0c0000000000000000000000000000000000555555555555555555555509aaaaaa9
-3612d33333335556655533333338896300000000000000000000000000000000000000000000000000000000000000000000000000000000c000000c08888880
-361ed35555555ff66655555555389963077770000000000000000000000000000000000000000000000000000000000000000000000000000c0000c080000008
-36de1355d1115ff66655511d55399a63077700000000000000000000000000000000000000000000000000000000000000c00c000008800000c00c0080000008
-36d21355d1115ff66ff51111d539aa630770000000000000000000000000000000000000000000000000000000000000000cc00000800800000cc00080000008
-3362d35d11115ffffff51111d53aab630700000000000000000000000000000000000000000000000000000000000000000cc00000800800000cc00080000008
-3336d35d111155fffff51111d53abb63000000000000000500000000000000000000000000000000000000000000000000c00c000008800000c00c0080000008
-3333635d111115f999945111d53bb633000000000000000500000000000000000000000000000000000000000000000000000000000000000c0000c080000008
-3333335d1111154999945111d53b633300000000005555550000000000000000000000000000000000000000000000000000000000000000c000000c08888880
+00000000000000000000000000000000cccccccccccccccc0675000000006750aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa05555555555555555555555000000000
+00000000000000000000000000000000c777777777cccccc0675000000006750aaaaaa0aaa0aaaaaaaaaaaaaaaaaaaaa55000055550000555500005500666600
+00000000000000111100000000000000c7ccccccccccccc10675000000006750aaaaaa0aa0aaaaaaaaaaaaaaaaaaaaaa50000005500000055000000506000060
+00000000000001cccc10000000000000ccccccccccccc1110888000000008880aaaa0000000000000aaaaaaaaaaaaaaa50000005500000055000000506000060
+0000000000011111111110000000000006750000000067508788800000087888aa00a00a00aaaaaaa00aaaaaaaaaaaaa50000005500000055000000506000060
+0000000000dddddddddddd000000000006750000000067508888800000088888aa0000aaaaaaaaaaaa00aaaaaaaaaaaa50000005500000055000000506000060
+0000dddddddddd5555dddddddddd000006750000000067508888200000088882aaaaa0a0000000000aa0aaaaaaaaaaaa55000055550000555500005500666600
+000d1111dddd55511555dddd1111d00006750000000067500882000000008820aaaa0000aaaaaaaa0aaa0aaaaaaaaaaa55555555555555555555555500000000
+00d1aaaa1ddd551dd155ddd1aaaa1d0000000000000000000000000000000000aaa000aaaaaaaaaa0aaa0aaaaaaaaaaa55555555555555555555555500000000
+0d1a9998a1d551dddd155d1a8999a1d000000000000000000000000000000000aaaaaaaaaaaaaaaa0aaa0aaaaaaaaaaa55000055550000555500005500999900
+dd18884481d551dddd155d18448881dd000ccc000000000c000000ccc000000caaaaaaaaaaaaaaa00aaa0aaaaaaaaaaa50000005500000055000000509000090
+dd1a9998a1d551dddd155d1a8999a1ddc0cc0c00ccc00ccc0ccc0cc0cc0000ccaaaaaaaaaaaaaaa0aaa00aaaaaaaaaaa50000005500000055000000509000090
+00d1aaaa1dd5551111555dd1aaaa1d000cc00ccc00cccc00cc0ccc000ccccc00aaaaaaaaaaaaa000aaa0aaaaaaaaaaaa50000005500000055000000509000090
+000d1111d00dd555555dd00d1111d00000000000000cc000c0000000000cc000aaaaaaaaaaaa00aaaa00aaaaaaaaaaaa50000005500000055000000509000090
+0000000000000dddddd000000000000000000000000000000000000000000000aaaaaaaaaaa0aaaaa0aaaaaaaaaaaaaa55000055550000555500005500999900
+0000000000000000000000000000000000000000000000000000000000000000aaaaaaaaa00aaaa00aaaaaaaaaaaaaaa55555555555555555555555500000000
+000000006666666666666666000000000c00c00000cc00c00cc000c000cc0cc0aaaaaaaaa00aa000aaaaaaaaaaaaaaaa5555555555555555555555559aaaaaa9
+000000663333363553633333660000000c00ccc000c00cc00c000cc00cc000c0aaaaaaa00aaa00aaaaaaaaaaaaaaaaaa550000555500005555000055a900009a
+000066555755335b55335555556600000c000cc000c00c000cc00c000c0000c0aaaaaaa0aa0a0aaaaaaaaaaaaaaaaaaa500000055000000550000005a090090a
+00663355b75535555b53b5bb5b3366000cc00c0000cccc0000cc0cc00cc00cc0aaaaaa00aa0a00aaa00aaaaaaaaaaaaa500000055000000550000005a009900a
+663333775ab535b5555355555533336600cc0c0000cccc00000c0c0000c00c00aaaaaa00aaaaa0000000aaaaaaaaaaaa500000055000000550000005a009900a
+3333335ba5773355b533bb5bb5333336000c0cc00cc00c000cc00c0000c00c00aaaaaaa00000000000aaaaaaaaaaaaaa500000055000000550000005a090090a
+36d333557b553635536355555533386300cc00c000c00c000c000cc000ccccc0aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa550000555500005555000055a900009a
+36d23355755533333333bbb5bb33886300c000c000c000c00c0000cc0000c0c0a00aa00aaaaa00aa0aaaaaaaaaaaa0aa0555555555555555555555509aaaaaa9
+3612d33333335556655533333338896300000000000000000000000000000000a0a0a0a0aaa0aaa000a00aa000aaa0aa0000000000000000c000000c08888880
+361ed35555555ff6665555555538996307777000000000000000000000000000a0a0a0a0aaa00aaa0aa0a0a0a0aaa0aa00000000000000000c0000c080000008
+36de1355d1115ff66655511d55399a6307770000000000000000000000000000a0a0a000aaaaa0aa0aa000a0a0aaa0aa00c00c000008800000c00c0080000008
+36d21355d1115ff66ff51111d539aa6307700000000000000000000000000000aaaaaaaaaaa000aa0aa0aaa000aaa0aa000cc00000800800000cc00080000008
+3362d35d11115ffffff51111d53aab6307000000000000000000000000000000aaaaaaaaaaaaaaaaaaaa00a0aaaaa0aa000cc00000800800000cc00080000008
+3336d35d111155fffff51111d53abb6300000000000000050000000000000000aaaaaaaaaaaaaaaaaaaaaaa0aaaaaaaa00c00c000008800000c00c0080000008
+3333635d111115f999945111d53bb63300000000000000050000000000000000aaaaaaaaaaaaaaaaaaaaaaa0aaaaa0aa00000000000000000c0000c080000008
+3333335d1111154999945111d53b633300000000005555550000000000000000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0000000000000000c000000c08888880
 __gff__
 0000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0303030300000000000000000000000003010004000000000000000000000000000000000000000000000000000000000000010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -1888,14 +2017,14 @@ __sfx__
 011000000c4750c475134750c4750c4750c475134750c4750c4750c475134750c4750c4750c475134750c47508475084750f4750847508475084750f475084750a4750a475114750a4750a4750a475114750a475
 0110000018270182701c2001c2001827018270162701827018270162701627018270182701a2701a2701b2001b2701b2701a2701a27018270182701627018270182701b2701b2701a2701a270002001627016270
 011000000c2702427124370243702437224372243722437230271302703037030370303723037230372303722b2702b3722927029372222702437027270293702427027370292702b370272702b3702e37030370
+0002000000000100400a0300502002010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00010000000002205000000040502e05000000130500a050000001265000000000000000000000040500365000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00060000110500a0501803001000361001c000381003c1003f1001c000180001a0001c000180001a0001c000180001a0001c000180001a0021c002180001a0021c0020d00007000010000d00022000220001d000
+00070000065500b55011530185301e520245202b51031510300003100031000310003100032000320003200032000320003200032000320003200032000320003200032000320003200032000320003200032000
+000600000a75007750087500775006750057500775007750067500675004750047500575004750037500275002750037500375001750027500375001750017400273002720027200172001710017100170002700
+00060000377503775037750067002e7502e7502e7500e7003c7503c7503c750110003f7503f7503f750390000000007000040002d000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -1945,7 +2074,7 @@ __music__
 00 4c1f1d1c
 00 411f1e1c
 02 411f1e1c
-00 41424344
+03 292a4344
 00 41424344
 00 41424344
 00 41424344
@@ -1977,4 +2106,3 @@ __music__
 03 41423e3f
 00 41424344
 00 41424344
-
